@@ -1,0 +1,7 @@
+###########################################
+# UTILIZZARE %user PER IL NOME DEL PLAYER #
+###########################################
+
+settings:
+  messaggioEntrata: '%user è entrato nel server!'
+  messaggioUscita: '%user è uscito dal server!'

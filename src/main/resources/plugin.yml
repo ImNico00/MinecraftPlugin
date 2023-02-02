@@ -1,9 +1,0 @@
-name: PluginProva
-version: 1.0
-main: MyPlugin
-description: Sarra cesso
-author: Gervasi
-commands:
-      gerv:
-        description: comando prova
-        aliases: [gervasi, g]
