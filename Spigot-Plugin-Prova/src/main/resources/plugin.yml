@@ -7,3 +7,6 @@ commands:
       MyCommand:
         description: Comando eseguibile con alias ["m","mycomm","gervasi"]
         aliases: [m, myplug, gervasi]
+      Soldi:
+        description: Comando eseguibile con alia ["s", "money"]. Visualizzi i tuoi soldi
+        aliases: [s, money]
