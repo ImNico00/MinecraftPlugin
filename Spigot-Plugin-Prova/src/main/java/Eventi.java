@@ -7,7 +7,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 import java.util.*;
 
 public class Eventi implements Listener {
-    @SuppressWarnings("unchecked") static List<String> Motd = MyPlugin.getInstance().getConfig().getList("settings.motd") != null ? (List<String>) MyPlugin.getInstance().getConfig().getList("settings.motd") : Arrays.asList("Hello", "World!");
+    @SuppressWarnings("unchecked") static List<String> Motd = MyPlugin.getInstance().getConfig().getList("Settaggi.motd") != null ? (List<String>) MyPlugin.getInstance().getConfig().getList("Settaggi.motd") : Arrays.asList("Hello", "World!");
     static Iterator<String> lista = staticInitializer();
 
     static private Iterator<String> staticInitializer() {
@@ -32,7 +32,7 @@ public class Eventi implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        String entrato = MyPlugin.getInstance().getConfig().getString("settings.messaggioEntrata");
+        String entrato = MyPlugin.getInstance().getConfig().getString("Settaggi.messaggioEntrata");
         Player p = e.getPlayer();
         String id = p.getUniqueId().toString();
         Economy eco = new Economy();
@@ -48,7 +48,7 @@ public class Eventi implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e){
-        String uscito = MyPlugin.getInstance().getConfig().getString("settings.messaggioUscita");
+        String uscito = MyPlugin.getInstance().getConfig().getString("Settaggi.messaggioUscita");
         if (uscito == null) uscito = "";
         e.setQuitMessage(uscito.replace("%user",e.getPlayer().getName()).replaceAll("&","§"));
     }

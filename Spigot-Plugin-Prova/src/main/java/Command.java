@@ -27,12 +27,16 @@ public class Command implements CommandExecutor {
                         else if (argomenti[0].length() > 11 && argomenti[0].startsWith("-")) s_nuovi = -2147483647;
                         else s_nuovi = Integer.parseInt(argomenti[0]);
                         economia.aggiornaHash(uuid, s_nuovi);
-                        p.sendMessage("Ora hai: " + s_nuovi);
+                        String mess = MyPlugin.getInstance().getConfig().getString("Economia.messaggioSoldi");
+                        assert mess != null;
+                        p.sendMessage(mess.replaceAll("%money", String.valueOf(s_nuovi)));
                     } catch (NumberFormatException e) {
                         p.sendMessage("Devi inserire un numero coglione...");
                     }
                 } else {
-                    p.sendMessage("Hai " + economia.getSoldi(uuid).toString());
+                    String mess = MyPlugin.getInstance().getConfig().getString("Economia.messaggioSoldi");
+                    assert mess != null;
+                    p.sendMessage(mess.replaceAll("%money", economia.getSoldi(uuid).toString()));
                 }
             } else {
                 sender.sendMessage("§4Devi essere un player lol");

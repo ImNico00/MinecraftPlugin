@@ -3,10 +3,14 @@
 # PER COLORARE LE SCRITTE USARE &         #
 ###########################################
 
-settings:
+Settaggi:
   messaggioEntrata: '&a%user è entrato nel server!'
   messaggioUscita: '&4%user è uscito dal server!'
   motd:
     - '&aQuesto è un bellissimo server!'
     - '&4&bSARRA MERDA'
     - '&cCiaoooaoao'
+
+Economia:
+  messaggioSoldi: '&aHai: %money €'
+  messaggioModificaSoldi: '&aOra hai: %money €'
