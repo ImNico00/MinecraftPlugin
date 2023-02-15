@@ -76,7 +76,7 @@ public class DeathListener implements Listener {
             Iterator<Body> bodyIterator = plugin.getBodyManager().getBodies().iterator();
             while (bodyIterator.hasNext()) {
                 Body body = bodyIterator.next();
-                if (body.getArmorStandList().contains(armorStand)) {
+                if (body.getArmorStandList().contains(armorStand.getUniqueId())) {
 
                     p_who_clicked.playSound(p_who_clicked.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.1f);
 
