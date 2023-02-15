@@ -176,10 +176,10 @@ public class DeathListener implements Listener {
             }.runTaskLater(plugin, 20L);
         });
 
-        List<ArmorStand> armorStands = new ArrayList<>();
-        armorStands.add(armorStand1);
-        armorStands.add(armorStand2);
-        armorStands.add(armorStand3);
+        List<UUID> armorStands = new ArrayList<>();
+        armorStands.add(armorStand1.getUniqueId());
+        armorStands.add(armorStand2.getUniqueId());
+        armorStands.add(armorStand3.getUniqueId());
 
         return new Body(p.getUniqueId(), npc, stack, armorStands, System.currentTimeMillis());
     }

@@ -9,6 +9,7 @@ import org.bukkit.entity.ArmorStand;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BodyManager {
     private final List<Body> bodies;
@@ -28,8 +29,8 @@ public class BodyManager {
             ps.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, body.getNpc()));
             ps.send(new ClientboundRemoveEntitiesPacket(body.getNpc().getId()));
         });
-        for (ArmorStand armor : body.getArmorStandList()) {
-            armor.remove();
+        for (UUID armor : body.getArmorStandList()) {
+            Bukkit.getEntity(armor).remove();
         }
     }
 
