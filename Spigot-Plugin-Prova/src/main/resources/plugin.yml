@@ -1,12 +1,19 @@
 name: DidacticPlugin
 version: 1.0
-main: MyPlugin
+main: DidacticPlugin.MyPlugin
 description: A Plugin for didactic only
 author: Nico, Ste
 commands:
       MyCommand:
         description: Comando eseguibile con alias ["m","mycomm","gervasi"]
+        usage: /<command>
         aliases: [m, myplug, gervasi]
       Soldi:
-        description: Comando eseguibile con alia ["s", "money"]. Visualizzi i tuoi soldi
+        description: Comando eseguibile con alias ["s", "money"].
+        usage: /<command>, /<command> set <playername> <soldi>
         aliases: [s, money]
+permissions:
+  didacticplugin.*:
+    description: Dà tutti i permessi
+  didacticplugin.setsoldi:
+    description: Dà il permesso di settare i soldi

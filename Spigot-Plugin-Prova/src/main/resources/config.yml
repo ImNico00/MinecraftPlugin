@@ -1,11 +1,18 @@
 ###########################################
 # UTILIZZARE %user PER IL NOME DEL PLAYER #
+# UTILIZZARE %money PER LA VAR DEI SOLDI  #
+# UTILIZZARE %msg PER IL MESSAGGIO INVIATO#
 # PER COLORARE LE SCRITTE USARE &         #
 ###########################################
 
 Settaggi:
   messaggioEntrata: '&a%user è entrato nel server!'
   messaggioUscita: '&4%user è uscito dal server!'
+  messaggioMirato:
+    - ''
+    - '&a&lBENVENUTO/A NEL SERVER!'
+    - '&7Divertiti, eh ma io...'
+    - ''
   motd:
     - '&aQuesto è un bellissimo server!'
     - '&4&bSARRA MERDA'
@@ -13,4 +20,12 @@ Settaggi:
 
 Economia:
   messaggioSoldi: '&aHai: %money €'
-  messaggioModificaSoldi: '&aOra hai: %money €'
+  messaggioSoldiTarget: '&aIl player %user ha: %money €'
+  messaggioModificaSoldi:
+    - '&aOra il player %user ha: %money €'
+    - '&aIl tuo bilancio è stato modificato a: %money €'
+
+Permessi:
+  nomeAdmin: '&a&l%user'
+  chat: ' &7» %msg'
+  prefissoChat: '&c'

@@ -1,7 +1,12 @@
+package DidacticPlugin;
+
+import DidacticPlugin.BodyEvents.BodyManager;
+import DidacticPlugin.BodyEvents.DeathListener;
+import DidacticPlugin.Tasks.BodyRemoverTask;
+import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,12 +16,13 @@ import java.util.HashMap;
 public class MyPlugin extends JavaPlugin {
 
     public static MyPlugin plugin;
-    @Override
-    public void onDisable() {
-        saveMoney();
-        super.onDisable();
-        Bukkit.getConsoleSender().sendMessage("[DidacticPlugin] §4Plugin disabilitato");
-    }
+    @SuppressWarnings("unused")
+    public static int version = getIntVersion()[0];
+    @SuppressWarnings("unused")
+    public static int release = getIntVersion()[1];
+    public static Permissions perms = new Permissions();
+    private BodyManager bodyManager;
+
 
     @Override
     public void onEnable(){
@@ -27,11 +33,20 @@ public class MyPlugin extends JavaPlugin {
         //REGISTRAZIONE EVENTI
         Bukkit.getPluginManager().registerEvents(new Eventi(), this);
 
+
         //REGISTRAZIONE COMANDI
         PluginCommand command = getCommand("MyCommand");
         if (command != null) command.setExecutor(new Command());
         command = getCommand("Soldi");
-        if (command != null) command.setExecutor(new Command());
+        if (command != null) {
+            command.setExecutor(new Command());
+            command.setTabCompleter(new TabCompletion());
+        }
+
+        this.bodyManager = new BodyManager();
+        Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
+        BodyRemoverTask bodyRemover = new BodyRemoverTask(this, bodyManager);
+        bodyRemover.runTaskTimerAsynchronously(this, 20L, 20L);
 
         //CONFIGURAZIONI
         saveDefaultConfig();
@@ -61,21 +76,47 @@ public class MyPlugin extends JavaPlugin {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public void onDisable() {
+        try {
+            saveMoney();
+        } catch (Exception e) {
+            System.out.println("Errore salvataggio soldi");
+        }
+
+        super.onDisable();
+        Bukkit.getConsoleSender().sendMessage("[DidacticPlugin] §4Plugin disabilitato");
+    }
+
     private void saveMoney() {
-        JSONObject jsonObject = new JSONObject();
+        JsonObject object = new JsonObject();
         HashMap<String, Integer> hash = Economy.getHash();
         for (String p: hash.keySet()){
-            jsonObject.put(p, hash.get(p));
+            object.addProperty(p, hash.get(p));
         }
         FileWriter file;
         try {
             file = new FileWriter("economy/output.json");
-            file.write(jsonObject.toJSONString());
+            file.write(object.toString());
             file.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public static int[] getIntVersion() {
+        int version = Integer.parseInt(Bukkit.getServer().getClass().getName().split("\\.")[3].split("_")[1]);
+        int release = Integer.parseInt(Bukkit.getServer().getClass().getName().split("\\.")[3].split("R")[1]);
+        return new int[]{version, release};
+    }
+
+    public static Permissions get_permissions() {
+        return perms;
+    }
+
+    public BodyManager getBodyManager(){
+        return bodyManager;
+    }
+
 
 }

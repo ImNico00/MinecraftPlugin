@@ -1,34 +1,39 @@
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+package DidacticPlugin;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+
 
 public class Economy {
 
     private static final HashMap<String, Integer> hash = staticInitializer();
 
+
     private static HashMap<String, Integer> staticInitializer (){
         HashMap<String, Integer> main = new HashMap<>();
-        JSONParser parser = new JSONParser();
+        JsonParser parser = new JsonParser();
+
         try {
-            Object obj = parser.parse(new FileReader("economy/output.json"));
-            JSONObject jsonObject = (JSONObject)obj;
-            for (Object p: jsonObject.keySet()) {
+            JsonObject obj = parser.parse(new FileReader("economy/output.json")).getAsJsonObject();
+            for (Map.Entry<String, JsonElement> p: obj.entrySet()) {
                 int s;
-                String stringa = jsonObject.get(p.toString()).toString();
+                String stringa = p.getValue().toString();
                 try {
-                    if (stringa.compareTo("2147483647") > 0) s = 2147483647;
-                    else if (stringa.length() > 11 && stringa.startsWith("-")) s = -2147483647;
+                    if (stringa.length() > 10 && stringa.startsWith("-")) s = -2147483647;
+                    else if (stringa.length() > 9) s = 2147483647;
                     else s = Integer.parseInt(stringa);
                 } catch(NumberFormatException e) {
                     s = 0;
                 }
-                main.put(p.toString(), s);
+                main.put(p.getKey(), s);
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return main;
