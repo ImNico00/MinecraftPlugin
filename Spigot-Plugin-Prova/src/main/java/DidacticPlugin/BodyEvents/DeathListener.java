@@ -173,7 +173,7 @@ public class DeathListener implements Listener {
                     ps.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, npc));
 
                 }
-            }.runTaskLaterAsynchronously(plugin, 20L);
+            }.runTaskLater(plugin, 20L);
         });
 
         List<ArmorStand> armorStands = new ArrayList<>();
