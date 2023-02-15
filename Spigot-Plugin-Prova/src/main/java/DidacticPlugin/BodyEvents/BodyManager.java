@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,9 @@ public class BodyManager {
             ps.send(new ClientboundRemoveEntitiesPacket(body.getNpc().getId()));
         });
         for (UUID armor : body.getArmorStandList()) {
-            Bukkit.getEntity(armor).remove();
+            Entity stand = Bukkit.getEntity(armor);
+            if(stand != null)
+                stand.remove();
         }
     }
 
