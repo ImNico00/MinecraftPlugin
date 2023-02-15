@@ -46,7 +46,7 @@ public class MyPlugin extends JavaPlugin {
         this.bodyManager = new BodyManager();
         Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
         BodyRemoverTask bodyRemover = new BodyRemoverTask(this, bodyManager);
-        bodyRemover.runTaskTimerAsynchronously(this, 20L, 20L);
+        bodyRemover.runTaskTimer(this, 20L, 20L);
 
         //CONFIGURAZIONI
         saveDefaultConfig();

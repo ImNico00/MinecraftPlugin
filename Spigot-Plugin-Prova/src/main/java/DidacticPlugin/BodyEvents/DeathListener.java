@@ -76,7 +76,7 @@ public class DeathListener implements Listener {
             Iterator<Body> bodyIterator = plugin.getBodyManager().getBodies().iterator();
             while (bodyIterator.hasNext()) {
                 Body body = bodyIterator.next();
-                if (body.getArmorStandList().contains(armorStand)) {
+                if (body.getArmorStandList().contains(armorStand.getUniqueId())) {
 
                     p_who_clicked.playSound(p_who_clicked.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.1f);
 
@@ -173,13 +173,13 @@ public class DeathListener implements Listener {
                     ps.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, npc));
 
                 }
-            }.runTaskLaterAsynchronously(plugin, 20L);
+            }.runTaskLater(plugin, 20L);
         });
 
-        List<ArmorStand> armorStands = new ArrayList<>();
-        armorStands.add(armorStand1);
-        armorStands.add(armorStand2);
-        armorStands.add(armorStand3);
+        List<UUID> armorStands = new ArrayList<>();
+        armorStands.add(armorStand1.getUniqueId());
+        armorStands.add(armorStand2.getUniqueId());
+        armorStands.add(armorStand3.getUniqueId());
 
         return new Body(p.getUniqueId(), npc, stack, armorStands, System.currentTimeMillis());
     }

@@ -31,8 +31,6 @@ public class BodyRemoverTask extends BukkitRunnable {
 
             long now = System.currentTimeMillis();
             if ((now - body.getWhen_died()) >= (10000)) {
-                bodyIterator.remove();
-
                 new BukkitRunnable(){
                     @Override
                     public void run() {
@@ -54,6 +52,7 @@ public class BodyRemoverTask extends BukkitRunnable {
                 if (playerWhoDied != null) {
                     playerWhoDied.sendMessage("Non hai reclamato il tuo corpo entro 15 minuti perciò è stato rimosso");
                 }
+                bodyIterator.remove();
             }
 
         }

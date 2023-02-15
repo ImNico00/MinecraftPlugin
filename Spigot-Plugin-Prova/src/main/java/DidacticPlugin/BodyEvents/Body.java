@@ -12,10 +12,10 @@ public class Body {
     private final UUID who_died;
     private final long when_died;
     private final ItemStack[] items;
-    private final List<ArmorStand> armorStandList;
+    private final List<UUID> armorStandList;
 
 
-    public Body(UUID whoDied, ServerPlayer npc, ItemStack[] items, List<ArmorStand> armorStands, long whenDied) {
+    public Body(UUID whoDied, ServerPlayer npc, ItemStack[] items, List<UUID> armorStands, long whenDied) {
         this.who_died = whoDied;
         this.npc = npc;
         this.items = items;
@@ -23,7 +23,7 @@ public class Body {
         this.when_died = whenDied;
     }
 
-    public List<ArmorStand> getArmorStandList() {
+    public List<UUID> getArmorStandList() {
         return armorStandList;
     }
 
