@@ -61,6 +61,8 @@ public class Eventi implements Listener {
             eco.aggiornaHash(id,0);
         }
 
+
+        // INVIO LISTA MESSAGGI
         @SuppressWarnings("unchecked") List<String> joinMirato = (List<String>) MyPlugin.getInstance().getConfig().getList("Settaggi.messaggioMirato");
 
         if (joinMirato != null) {

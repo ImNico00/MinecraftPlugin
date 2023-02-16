@@ -4,14 +4,12 @@ import DidacticPlugin.MyPlugin;
 import DidacticPlugin.Permissions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mojang.datafixers.util.Pair;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,11 +55,19 @@ public class DeathListener implements Listener {
         String random = String.valueOf(rand.nextInt(3000));
         Permissions permessi = MyPlugin.get_permissions();
         permessi.setPermissions(p, random, true);
-        TextComponent mainText = new TextComponent("§c"+e.getDeathMessage());
+        String death = e.getDeathMessage();
+        assert death != null;
         e.setDeathMessage("");
+
+        TextComponent mainText = new TextComponent("§c"+death);
         mainText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cRitorna dove sei morto").create()));
         mainText.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/MyCommand tp_serializing_for_player " + random));
         p.spigot().sendMessage(mainText);
+
+        for (Player t: Bukkit.getServer().getOnlinePlayers()) {
+            if (t != p)
+                t.sendMessage(death);
+        }
 
         plugin.getBodyManager().getBodies().add(spawnBody(p));
 
@@ -76,9 +82,9 @@ public class DeathListener implements Listener {
             Iterator<Body> bodyIterator = plugin.getBodyManager().getBodies().iterator();
             while (bodyIterator.hasNext()) {
                 Body body = bodyIterator.next();
-                if (body.getArmorStandList().contains(armorStand)) {
+                if (body.getArmorStandList().contains(armorStand.getUniqueId())) {
 
-                    p_who_clicked.playSound(p_who_clicked.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.1f);
+                    p_who_clicked.playSound(p_who_clicked.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1.0f, 1.1f);
 
                     Location bodyLoc = body.getNpc().getBukkitEntity().getLocation();
                         for (ItemStack item : body.getItems()) {
@@ -130,25 +136,30 @@ public class DeathListener implements Listener {
 
         npc.setPos(location.getX(), loc.getY()+1, location.getZ());
         npc.setPose(Pose.SLEEPING);
-        npc.setItemSlot(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(p_inv.getBoots()), true);
-        npc.setItemSlot(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(p_inv.getLeggings()), true);
-        npc.setItemSlot(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(p_inv.getChestplate()), true);
-        npc.setItemSlot(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(p_inv.getHelmet()), true);
+        List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> equipmentList = new ArrayList<>();
+        equipmentList.add(new Pair<>(EquipmentSlot.FEET, CraftItemStack.asNMSCopy(p_inv.getBoots())));
+        equipmentList.add(new Pair<>(EquipmentSlot.LEGS, CraftItemStack.asNMSCopy(p_inv.getLeggings())));
+        equipmentList.add(new Pair<>(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(p_inv.getChestplate())));
+        equipmentList.add(new Pair<>(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(p_inv.getHelmet())));
 
 
         Location armorLoc = location.clone();
         ArmorStand armorStand1 = (ArmorStand) p.getWorld().spawnEntity(armorLoc, EntityType.ARMOR_STAND);
         armorStand1.setSmall(true);
-        armorStand1.setInvisible(false);
+        armorStand1.setInvisible(true);
         armorStand1.setInvulnerable(true);
+        armorStand1.setGravity(false);
         ArmorStand armorStand2 = (ArmorStand) p.getWorld().spawnEntity(armorLoc.subtract(1, 0, 0), EntityType.ARMOR_STAND);
         armorStand2.setSmall(true);
-        armorStand2.setInvisible(false);
+        armorStand2.setInvisible(true);
         armorStand2.setInvulnerable(true);
-        ArmorStand armorStand3 = (ArmorStand) p.getWorld().spawnEntity(armorLoc.subtract(0.5, 0, 0), EntityType.ARMOR_STAND);
+        armorStand2.setGravity(false);
+        ArmorStand armorStand3 = (ArmorStand) p.getWorld().spawnEntity(armorLoc.subtract(1, 0, 0), EntityType.ARMOR_STAND);
         armorStand3.setSmall(true);
-        armorStand3.setInvisible(false);
+        armorStand3.setInvisible(true);
         armorStand3.setInvulnerable(true);
+        armorStand3.setGravity(false);
+
 
 
 
@@ -161,6 +172,7 @@ public class DeathListener implements Listener {
             ps.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, npc));
             ps.send(new ClientboundAddPlayerPacket(npc));
             ps.send(new ClientboundSetEntityDataPacket(npc.getId(), npc.getEntityData(), true));
+            ps.send(new ClientboundSetEquipmentPacket(npc.getId(), equipmentList));
 
             //remove the team
             ps.send(ClientboundSetPlayerTeamPacket.createRemovePacket(team));
@@ -176,10 +188,10 @@ public class DeathListener implements Listener {
             }.runTaskLaterAsynchronously(plugin, 20L);
         });
 
-        List<ArmorStand> armorStands = new ArrayList<>();
-        armorStands.add(armorStand1);
-        armorStands.add(armorStand2);
-        armorStands.add(armorStand3);
+        List<UUID> armorStands = new ArrayList<>();
+        armorStands.add(armorStand1.getUniqueId());
+        armorStands.add(armorStand2.getUniqueId());
+        armorStands.add(armorStand3.getUniqueId());
 
         return new Body(p.getUniqueId(), npc, stack, armorStands, System.currentTimeMillis());
     }

@@ -30,7 +30,7 @@ public class BodyRemoverTask extends BukkitRunnable {
             Body body = bodyIterator.next();
 
             long now = System.currentTimeMillis();
-            if ((now - body.getWhen_died()) >= (10000)) {
+            if ((now - body.getWhen_died()) >= (1000 * 60 * 15)) {
                 bodyIterator.remove();
 
                 new BukkitRunnable(){

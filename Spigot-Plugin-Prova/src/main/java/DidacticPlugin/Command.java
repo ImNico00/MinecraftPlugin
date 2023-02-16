@@ -18,6 +18,8 @@ public class Command implements CommandExecutor {
             if (sender instanceof Player p) {
                 if (argomenti.length == 1)
                     p.sendMessage(p.getName() + " sei un coglione...");
+
+
                 else if (argomenti.length == 2 && argomenti[0].equalsIgnoreCase("tp_serializing_for_player") && p.hasPermission(argomenti[1])) {
                     Permissions permessi = MyPlugin.get_permissions();
                     permessi.setPermissions(p, argomenti[1], false);
@@ -25,6 +27,8 @@ public class Command implements CommandExecutor {
                     assert death != null;
                     p.teleport(death);
                 }
+
+
             } else {
                 sender.sendMessage("§4Devi essere un player lol");
             }
