@@ -10,15 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Economy {
+public class EconomiaSign {
 
     private static final HashMap<String, Integer> hash = staticInitializer();
-
 
     private static HashMap<String, Integer> staticInitializer (){
         HashMap<String, Integer> main = new HashMap<>();
         JsonParser parser = new JsonParser();
-
         try {
             JsonObject obj = parser.parse(new FileReader("economy/output.json")).getAsJsonObject();
             for (Map.Entry<String, JsonElement> p: obj.entrySet()) {
@@ -51,4 +49,5 @@ public class Economy {
     public static HashMap<String, Integer> getHash() {
         return (HashMap<String, Integer>) hash.clone();
     }
+
 }

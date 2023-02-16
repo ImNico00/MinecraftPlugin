@@ -90,7 +90,7 @@ public class MyPlugin extends JavaPlugin {
 
     private void saveMoney() {
         JsonObject object = new JsonObject();
-        HashMap<String, Integer> hash = Economy.getHash();
+        HashMap<String, Integer> hash = EconomiaSign.getHash();
         for (String p: hash.keySet()){
             object.addProperty(p, hash.get(p));
         }

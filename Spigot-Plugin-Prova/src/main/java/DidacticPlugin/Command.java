@@ -36,7 +36,7 @@ public class Command implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("Soldi")) {
-            Economy economia = new Economy();
+            EconomiaSign economia = new EconomiaSign();
 
             if (argomenti.length == 0) {
                 if (sender instanceof Player p) {

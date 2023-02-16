@@ -47,7 +47,7 @@ public class Eventi implements Listener {
         String entrato = MyPlugin.getInstance().getConfig().getString("Settaggi.messaggioEntrata");
         Player p = e.getPlayer();
         String id = p.getUniqueId().toString();
-        Economy eco = new Economy();
+        EconomiaSign eco = new EconomiaSign();
 
         if (entrato == null) entrato = "";
         for (Player t: Bukkit.getServer().getOnlinePlayers()) {
@@ -57,7 +57,7 @@ public class Eventi implements Listener {
         Bukkit.getConsoleSender().sendMessage(entrato.replace("%user",e.getPlayer().getName()).replaceAll("&","§"));
         e.setJoinMessage("");
 
-        if (!Economy.getHash().containsKey(id)) {
+        if (!EconomiaSign.getHash().containsKey(id)) {
             eco.aggiornaHash(id,0);
         }
 
