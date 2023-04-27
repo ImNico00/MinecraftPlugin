@@ -31,8 +31,8 @@ public class BodyManager {
         });
         for (UUID armor : body.getArmorStandList()) {
             Entity armorStand = Bukkit.getServer().getEntity(armor);
-            assert armorStand != null;
-            armorStand.remove();
+            if (armorStand != null) armorStand.remove();
+
         }
     }
 

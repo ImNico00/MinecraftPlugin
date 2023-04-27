@@ -1,8 +1,9 @@
 name: DidacticPlugin
 version: 1.0
 main: DidacticPlugin.MyPlugin
+api-version: 1.13
 description: A Plugin for didactic only
-author: Nico, Ste
+author: Nico
 commands:
       MyCommand:
         description: Comando eseguibile con alias ["m","mycomm","gervasi"]

@@ -8,9 +8,14 @@
 Settaggi:
   messaggioEntrata: '&a%user è entrato nel server!'
   messaggioUscita: '&4%user è uscito dal server!'
-  messaggioMirato:
+  messaggioMirato_PrimaJoin:
     - ''
     - '&a&lBENVENUTO/A NEL SERVER!'
+    - '&7Divertiti, eh ma io...'
+    - ''
+  messaggioMirato_AltreJoin:
+    - ''
+    - '&a&lBENTORNATO/A NEL SERVER!'
     - '&7Divertiti, eh ma io...'
     - ''
   motd:

@@ -16,12 +16,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Pose;
+import org.bukkit.*;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
@@ -110,6 +109,12 @@ public class DeathListener implements Listener {
         Location location = p.getLastDeathLocation();
         assert location != null;
 
+        if (location.getBlock().getType().equals(Material.NETHER_PORTAL)) {
+            Block air_block = getNearbyAirBlocks(location, 1);
+            if (air_block != null) {
+                location = air_block.getLocation();
+            }
+        }
 
 
         CraftPlayer craftPlayer = (CraftPlayer) p;
@@ -130,9 +135,11 @@ public class DeathListener implements Listener {
 
 
         Location loc = location.clone();
+
         while (loc.getBlock().getType().isAir()) {
             loc.subtract(0, 1, 0);
         }
+
 
         npc.setPos(location.getX(), loc.getY()+1, location.getZ());
         npc.setPose(Pose.SLEEPING);
@@ -195,4 +202,23 @@ public class DeathListener implements Listener {
 
         return new Body(p.getUniqueId(), npc, stack, armorStands, System.currentTimeMillis());
     }
+
+
+    public static Block getNearbyAirBlocks(Location location, int radius) {
+        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
+            for(int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
+                for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
+                    World w = location.getWorld();
+                    if (w == null) return null;
+                    Block b = w.getBlockAt(x, y, z);
+                    if (b.getType().isAir()) {
+                        return b;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
 }
